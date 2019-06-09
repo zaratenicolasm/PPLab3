@@ -6,7 +6,7 @@ var PrimerParcial;
     var Manejadora = /** @class */ (function () {
         function Manejadora() {
         }
-        //AGREGAR
+        //AGREGAR JSON
         Manejadora.AgregarPerroJSON = function () {
             //PREVEER QUE MANDEN VACIO
             //RECUPERO
@@ -57,7 +57,7 @@ var PrimerParcial;
             //LIMPIO EL FORM
             PrimerParcial.Manejadora.LimpiarForm();
         };
-        //MOSTRAR
+        //MOSTRAR JSON
         Manejadora.MostrarPerrosJSON = function () {
             //PONGO LA IMAGEN POR DEFECTO
             document.getElementById("imgFoto").src = "./BACKEND/huella.jpg";
@@ -150,10 +150,11 @@ var PrimerParcial;
             xhttp.onreadystatechange = function () {
                 if (xhttp.readyState == 4 && xhttp.status == 200) {
                     var obj = JSON.parse(xhttp.responseText);
-                    var tabla = "<table border=4><tr><td>TAMAÑO</td><td>EDAD</td><td>PRECIO</td><td>NOMBRE</td><td>RAZA</td><td>FOTO</td></tr>";
+                    var tabla = "<table border=4><tr><td>TAMAÑO</td><td>EDAD</td><td>PRECIO</td><td>NOMBRE</td><td>RAZA</td><td>FOTO</td><td colspan='2'>ACCIONES</td></tr>";
                     console.log("Muestro lista por pantalla");
                     for (var i = 0; i < obj.length; i++) {
-                        tabla += "<tr><td>" + obj[i].tamanio + "</td><td>" + obj[i].edad + "</td><td>" + obj[i].precio + "</td><td>" + obj[i].nombre + "</td><td>" + obj[i].raza + "</td><td><img src='./BACKEND/fotos/" + obj[i].foto + "' width='50px' height='50px'></td></tr>";
+                        tabla += "<tr><td>" + obj[i].tamanio + "</td><td>" + obj[i].edad + "</td><td>" + obj[i].precio + "</td><td>" + obj[i].nombre + "</td><td>" + obj[i].raza + "</td><td><img src='./BACKEND/fotos/" + obj[i].foto + "' width='50px' height='50px'></td>" +
+                            "<td><input type='button' value='Eliminar' onclick='PrimerParcial.Manejadora.Eliminar(" + JSON.stringify(obj[i]) + ")'></td><td><input type='button' value='Modificar' onclick='PrimerParcial.Manejadora.Modificar(" + JSON.stringify(obj[i]) + ")'></td></tr>";
                     }
                     tabla += "</table>";
                     document.getElementById("divTabla").innerHTML = tabla;
@@ -213,6 +214,30 @@ var PrimerParcial;
             };
             //LIMPIO EL FORM
             PrimerParcial.Manejadora.LimpiarForm();
+        };
+        //ELIMINIAR BD
+        Manejadora.Eliminar = function (objJson) {
+            var unaManejadora = new PrimerParcial.Manejadora();
+            unaManejadora.EliminarPerro(objJson);
+        };
+        Manejadora.prototype.EliminarPerro = function (objJson) {
+            alert(objJson.nombre + " tiene " + objJson.edad + " años.");
+        };
+        //MODIFICAR BD
+        Manejadora.Modificar = function (objJson) {
+            var unaManejadora = new PrimerParcial.Manejadora();
+            unaManejadora.ModificarPerro(objJson);
+        };
+        Manejadora.prototype.ModificarPerro = function (objJson) {
+            alert(objJson.nombre + " tiene " + objJson.edad + " años.");
+        };
+        //OBTENER PERROS POR TAMAÑO BD
+        Manejadora.OPPT = function () {
+            var unaManejadora = new PrimerParcial.Manejadora();
+            unaManejadora.ObtenerPerrosPorTamanio();
+        };
+        Manejadora.prototype.ObtenerPerrosPorTamanio = function () {
+            alert("Hola");
         };
         //======================================================================
         //=========================GIF Y LIMPIAR================================

@@ -1,11 +1,18 @@
 /// <reference path="Perro.ts" />
 namespace PrimerParcial
 {
+    export interface IParte2
+    {
+        EliminarPerro(objJson : any) : void;
+        ModificarPerro(objJson : any) : void;
+        ObtenerPerrosPorTamanio() : void;
+    }
+
     var xhttp : XMLHttpRequest = new XMLHttpRequest();
 
-    export class Manejadora
+    export class Manejadora implements PrimerParcial.IParte2
     {
-        //AGREGAR
+        //AGREGAR JSON
         public static AgregarPerroJSON() : void
         {
             //PREVEER QUE MANDEN VACIO
@@ -56,7 +63,7 @@ namespace PrimerParcial
             //LIMPIO EL FORM
             PrimerParcial.Manejadora.LimpiarForm();
         }
-        //MOSTRAR
+        //MOSTRAR JSON
         public static MostrarPerrosJSON() : void
         {
             //PONGO LA IMAGEN POR DEFECTO
@@ -93,6 +100,7 @@ namespace PrimerParcial
                 }
             }            
         }
+        
         //AGREGAR BD
         public static AgregarPerroEnBaseDatos() : void
         {           
@@ -161,13 +169,14 @@ namespace PrimerParcial
                 if (xhttp.readyState == 4 && xhttp.status == 200) {
 
                     var obj : any[]= JSON.parse(xhttp.responseText);
-                    var tabla : string = "<table border=4><tr><td>TAMAÑO</td><td>EDAD</td><td>PRECIO</td><td>NOMBRE</td><td>RAZA</td><td>FOTO</td></tr>";
+                    var tabla : string = "<table border=4><tr><td>TAMAÑO</td><td>EDAD</td><td>PRECIO</td><td>NOMBRE</td><td>RAZA</td><td>FOTO</td><td colspan='2'>ACCIONES</td></tr>";
 
                     console.log("Muestro lista por pantalla");
                     
                     for(let i=0; i<obj.length; i++){
                         
-                        tabla += "<tr><td>"+ obj[i].tamanio +"</td><td>"+ obj[i].edad +"</td><td>"+ obj[i].precio +"</td><td>"+ obj[i].nombre +"</td><td>"+ obj[i].raza +"</td><td><img src='./BACKEND/fotos/"+ obj[i].foto +"' width='50px' height='50px'></td></tr>";
+                        tabla += "<tr><td>"+ obj[i].tamanio +"</td><td>"+ obj[i].edad +"</td><td>"+ obj[i].precio +"</td><td>"+ obj[i].nombre +"</td><td>"+ obj[i].raza +"</td><td><img src='./BACKEND/fotos/"+ obj[i].foto +"' width='50px' height='50px'></td>"+
+                        "<td><input type='button' value='Eliminar' onclick='PrimerParcial.Manejadora.Eliminar("+JSON.stringify(obj[i])+")'></td><td><input type='button' value='Modificar' onclick='PrimerParcial.Manejadora.Modificar("+JSON.stringify(obj[i])+")'></td></tr>";
                         
                     }
                     
@@ -233,6 +242,36 @@ namespace PrimerParcial
             }
             //LIMPIO EL FORM
             PrimerParcial.Manejadora.LimpiarForm();
+        }
+        //ELIMINIAR BD
+        public static Eliminar(objJson : any) : void
+        {
+            var unaManejadora : PrimerParcial.Manejadora = new PrimerParcial.Manejadora();
+            unaManejadora.EliminarPerro(objJson);
+        }
+        public EliminarPerro(objJson : any) : void
+        {
+            alert(objJson.nombre+" tiene "+objJson.edad+" años.");
+        }
+        //MODIFICAR BD
+        public static Modificar(objJson : any) : void
+        {
+            var unaManejadora : PrimerParcial.Manejadora = new PrimerParcial.Manejadora();
+            unaManejadora.ModificarPerro(objJson);
+        }
+        public ModificarPerro(objJson : any) : void
+        {
+            alert(objJson.nombre+" tiene "+objJson.edad+" años.");
+        }
+        //OBTENER PERROS POR TAMAÑO BD
+        public static OPPT() : void
+        {
+            var unaManejadora : PrimerParcial.Manejadora = new PrimerParcial.Manejadora();
+            unaManejadora.ObtenerPerrosPorTamanio(); 
+        }
+        public ObtenerPerrosPorTamanio() : void
+        {
+            alert("Hola");
         }
         //======================================================================
         //=========================GIF Y LIMPIAR================================
