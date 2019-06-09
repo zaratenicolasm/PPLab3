@@ -170,7 +170,7 @@ var PrimerParcial;
                     if (obj.FotoOK == true) {
                         console.log("Perro agregado en BD");
                         //MUESTRO TABLA ACTUALIZADA
-                        PrimerParcial.Manejadora.MostrarPerrosJSON();
+                        PrimerParcial.Manejadora.MostrarPerrosBaseDatos();
                         //OCULTO EL GIF
                         PrimerParcial.Manejadora.AdministrarGif(false);
                     }
@@ -246,14 +246,15 @@ var PrimerParcial;
                     var obj = JSON.parse(xhttp.responseText);
                     //INFORMO SI SE AGREGO O NO
                     if (obj.SeAgrego == true) {
-                        alert("Perro agregado en BD");
+                        console.log("Perro agregado en BD");
                         //MUESTRO TABLA ACTUALIZADA
-                        //PrimerParcial.Manejadora.MostrarPerrosJSON();
+                        PrimerParcial.Manejadora.MostrarPerrosBaseDatos();
                         //OCULTO EL GIF
                         PrimerParcial.Manejadora.AdministrarGif(false);
                     }
                     else if (obj.SeAgrego == false) {
-                        alert("El perro no se agrego en BD");
+                        console.log("El perro no se agrego, porque ya existe en BD");
+                        alert("El perro no se agrego, porque ya existe en BD");
                         //OCULTO EL GIF
                         PrimerParcial.Manejadora.AdministrarGif(false);
                     }
