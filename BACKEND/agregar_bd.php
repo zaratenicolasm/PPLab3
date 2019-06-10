@@ -11,13 +11,11 @@ $miPerro->edad = $objJSON->edad;
 $miPerro->precio = $objJSON->precio;
 $miPerro->nombre = $objJSON->nombre;
 $miPerro->raza = $objJSON->raza;
-$miPerro->path_foto = $objJSON->foto;
+$miPerro->path_foto = "./fotos/" . $objJSON->foto . ".jpg";
 
 $miPerro->InsertarElPerro();
 
-$destino = "./fotos/" . $objJSON->foto;
-
-if( ! move_uploaded_file($_FILES["foto"]["tmp_name"], $destino) ){
+if( ! move_uploaded_file($_FILES["foto"]["tmp_name"], $miPerro->path_foto) ){
     $resultado["FotoOK"] = false;
 }
 else{

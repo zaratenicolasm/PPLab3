@@ -142,18 +142,24 @@ var PrimerParcial;
             var precio = parseInt(document.getElementById("txtPrecio").value);
             var nombre = document.getElementById("txtNombre").value;
             var raza = document.getElementById("cboRaza").value;
-            //let hidden:string=(<HTMLInputElement>document.getElementById("hdnIdModificacion")).value;
+            //RECUPERO EL HIDDEN PARA SABER SI ES MODIFICAR O AGREGAR           
+            var hidden = document.getElementById("hdnIdModificacion").value;
             //RECUPERO LA IMAGEN SELECCIONADA POR EL USUARIO
             var foto = document.getElementById("foto");
             //GENERO EL OBJETO PERRO
-            var perro = new Entidades.Perro(tamanio, edad, precio, nombre, raza, nombre + "_" + raza + ".jpg");
+            var perro = new Entidades.Perro(tamanio, edad, precio, nombre, raza, nombre + "_" + raza);
             //MUESTRO EL GIF
             PrimerParcial.Manejadora.AdministrarGif(true);
             //==================================================================================
             //INSTANCIO OBJETO FORMDATA
             var form = new FormData();
             //AJAX POST
-            xhttp.open("POST", "./BACKEND/agregar_bd.php", true);
+            if (hidden == "Mod") {
+                xhttp.open("POST", "./BACKEND/modificar_bd.php", true);
+            }
+            else {
+                xhttp.open("POST", "./BACKEND/agregar_bd.php", true);
+            }
             xhttp.setRequestHeader("enctype", "multipart/form-data");
             //==================AGREGO PARAMETROS AL FORMDATA:===================================
             //PARAMETRO RECUPERADO POR $_FILES
@@ -165,22 +171,41 @@ var PrimerParcial;
             //VUELTA
             xhttp.onreadystatechange = function () {
                 if (xhttp.readyState == 4 && xhttp.status == 200) {
-                    var obj = JSON.parse(xhttp.responseText);
+                    alert(xhttp.responseText);
+                    /*let obj : any = JSON.parse(xhttp.responseText);
                     //INFORMO SI SE AGREGO O NO
                     if (obj.FotoOK == true) {
-                        console.log("Perro agregado en BD");
+                        if(hidden == "Mod"){
+                            console.log("Perro modificado en BD");
+                        }else{
+                            console.log("Perro agregado en BD");
+                        }
                         //MUESTRO TABLA ACTUALIZADA
                         PrimerParcial.Manejadora.MostrarPerrosBaseDatos();
                         //OCULTO EL GIF
                         PrimerParcial.Manejadora.AdministrarGif(false);
-                    }
-                    else {
-                        console.error("El perro no se agrego en BD");
+                    }else{
+                        if (hidden == "Mod") {
+                            console.error("El perro no se modifico en BD");
+                        }else{
+                            console.error("El perro no se agrego en BD");
+                        }
                         //OCULTO EL GIF
                         PrimerParcial.Manejadora.AdministrarGif(false);
-                    }
+                    }*/
                 }
             };
+            //SI ENTRE POR MODIFICAR RESTAURO VALORES    
+            if (hidden == "Mod") {
+                //HDN A VACIO
+                document.getElementById("hdnIdModificacion").value = "";
+                //DEJO MODIFICAR EL NOMBRE
+                document.getElementById("txtNombre").readOnly = false;
+                //CAMBIO EL NOMBRE DEL BOTON
+                document.getElementById("idAgregarBD").value = "Agregar en BD";
+                //IMG POR DEFECTO
+                document.getElementById("imgFoto").src = "./BACKEND/huella.jpg";
+            }
             //LIMPIO EL FORM
             PrimerParcial.Manejadora.LimpiarForm();
         };
@@ -202,7 +227,7 @@ var PrimerParcial;
                     var tabla = "<table border=4><tr><td>TAMAÑO</td><td>EDAD</td><td>PRECIO</td><td>NOMBRE</td><td>RAZA</td><td>FOTO</td><td colspan='2'>ACCIONES</td></tr>";
                     console.log("Muestro lista por pantalla");
                     for (var i = 0; i < obj.length; i++) {
-                        tabla += "<tr><td>" + obj[i].tamanio + "</td><td>" + obj[i].edad + "</td><td>" + obj[i].precio + "</td><td>" + obj[i].nombre + "</td><td>" + obj[i].raza + "</td><td><img src='./BACKEND/fotos/" + obj[i].foto + "' width='50px' height='50px'></td>" +
+                        tabla += "<tr><td>" + obj[i].tamanio + "</td><td>" + obj[i].edad + "</td><td>" + obj[i].precio + "</td><td>" + obj[i].nombre + "</td><td>" + obj[i].raza + "</td><td><img src='./BACKEND/" + obj[i].foto + "' width='50px' height='50px'></td>" +
                             "<td><input type='button' value='Eliminar' onclick='PrimerParcial.Manejadora.Eliminar(" + JSON.stringify(obj[i]) + ")'></td><td><input type='button' value='Modificar' onclick='PrimerParcial.Manejadora.Modificar(" + JSON.stringify(obj[i]) + ")'></td></tr>";
                     }
                     tabla += "</table>";
@@ -225,7 +250,7 @@ var PrimerParcial;
             //RECUPERO LA IMAGEN SELECCIONADA POR EL USUARIO
             var foto = document.getElementById("foto");
             //GENERO EL OBJETO PERRO
-            var perro = new Entidades.Perro(tamanio, edad, precio, nombre, raza, nombre + "_" + raza + ".jpg");
+            var perro = new Entidades.Perro(tamanio, edad, precio, nombre, raza, nombre + "_" + raza);
             //MUESTRO EL GIF
             PrimerParcial.Manejadora.AdministrarGif(true);
             //==================================================================================
@@ -270,7 +295,39 @@ var PrimerParcial;
             unaManejadora.EliminarPerro(objJson);
         };
         Manejadora.prototype.EliminarPerro = function (objJson) {
-            alert(objJson.nombre + " tiene " + objJson.edad + " años.");
+            //CONFIRMACION
+            var opcion;
+            opcion = confirm("Esta seguro que desea eliminar a " + objJson.nombre + " " + objJson.raza + "?");
+            //PONGO LA IMAGEN POR DEFECTO
+            document.getElementById("imgFoto").src = "./BACKEND/huella.jpg";
+            //VERIFICO CONFIRMACION
+            if (opcion == true) {
+                //LANZO GIF
+                PrimerParcial.Manejadora.AdministrarGif(true);
+                //AJAX POST
+                xhttp.open("POST", "./BACKEND/eliminar_bd.php", true);
+                xhttp.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+                //ENVIO LA PETICION
+                xhttp.send("caso=eliminar&cadenaJson=" + JSON.stringify(objJson));
+                //VUELTA
+                xhttp.onreadystatechange = function () {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        var obj = JSON.parse(xhttp.responseText);
+                        if (obj.TodoOK == true) {
+                            console.log("Perro eliminado");
+                            //ACTUALIZO LA TABLA
+                            PrimerParcial.Manejadora.MostrarPerrosBaseDatos();
+                            //OCULTO EL GIF
+                            PrimerParcial.Manejadora.AdministrarGif(false);
+                        }
+                        else if (obj.TodoOK == false) {
+                            console.error("El perro no se pudo eliminar");
+                            //OCULTO EL GIF
+                            PrimerParcial.Manejadora.AdministrarGif(false);
+                        }
+                    }
+                };
+            }
         };
         //MODIFICAR BD
         Manejadora.Modificar = function (objJson) {
@@ -278,7 +335,19 @@ var PrimerParcial;
             unaManejadora.ModificarPerro(objJson);
         };
         Manejadora.prototype.ModificarPerro = function (objJson) {
-            alert(objJson.nombre + " tiene " + objJson.edad + " años.");
+            //MUESTRO TODOS LOS ELEMENTOS EN EL INDEX
+            document.getElementById("txtTamanio").value = objJson.tamanio;
+            document.getElementById("txtEdad").value = objJson.edad;
+            document.getElementById("txtPrecio").value = objJson.precio;
+            document.getElementById("txtNombre").value = objJson.nombre;
+            document.getElementById("cboRaza").value = objJson.raza;
+            document.getElementById("imgFoto").src = "./BACKEND/" + objJson.foto;
+            //CAMBIO EL NOMBRE AL BOTON AGREGAR DANDOLE UN ID
+            document.getElementById("idAgregarBD").value = "Modificar en BD";
+            //SETEO EL HIDEN
+            document.getElementById("hdnIdModificacion").value = "Mod";
+            //NO DEJO MODIFICAR EL NOMBRE
+            document.getElementById("txtNombre").readOnly = true;
         };
         //OBTENER PERROS POR TAMAÑO BD
         Manejadora.OPPT = function () {

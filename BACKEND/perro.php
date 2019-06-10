@@ -62,34 +62,37 @@ class perro
         return $consulta;
     }
     
-    /*public static function ModificarCD($id, $titulo, $anio, $cantante)
+    public static function ModificarPerro($tamanio, $edad, $precio, $nombre, $raza, $foto)
     {
 
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         
-        $consulta =$objetoAccesoDato->RetornarConsulta("UPDATE cds SET titel = :titulo, interpret = :cantante, 
-                                                        jahr = :anio WHERE id = :id");
+        $consulta =$objetoAccesoDato->RetornarConsulta("UPDATE perros SET tamanio = :tamanio, edad = :edad, 
+                                                        precio = :precio, raza = :raza, path_foto = :foto WHERE nombre LIKE :nombre");
         
-        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
-        $consulta->bindValue(':titulo', $titulo, PDO::PARAM_INT);
-        $consulta->bindValue(':anio', $anio, PDO::PARAM_INT);
-        $consulta->bindValue(':cantante', $cantante, PDO::PARAM_STR);
+        $consulta->bindValue(':edad', $edad, PDO::PARAM_INT);
+        $consulta->bindValue(':tamanio', $tamanio, PDO::PARAM_STR);
+        $consulta->bindValue(':precio', $precio, PDO::PARAM_INT);
+        $consulta->bindValue(':nombre', $nombre, PDO::PARAM_STR);
+        $consulta->bindValue(':raza', $raza, PDO::PARAM_STR);
+        $consulta->bindValue(':foto', $foto, PDO::PARAM_STR);
 
         return $consulta->execute();
 
-    }*/
+    }
 
-    /*public static function EliminarCD($cd)
+    public static function EliminarPerro($perro)
     {
 
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         
-        $consulta =$objetoAccesoDato->RetornarConsulta("DELETE FROM cds WHERE id = :id");
+        $consulta =$objetoAccesoDato->RetornarConsulta("DELETE FROM perros WHERE nombre LIKE :nombre AND raza LIKE :raza" );
         
-        $consulta->bindValue(':id', $cd->id, PDO::PARAM_INT);
+        $consulta->bindValue(':nombre', $perro->nombre, PDO::PARAM_STR);
+        $consulta->bindValue(':raza', $perro->raza, PDO::PARAM_STR);;
 
         return $consulta->execute();
 
-    }*/
+    }
     
 }
