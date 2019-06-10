@@ -99,7 +99,8 @@ namespace PrimerParcial
                     
                 }
             }            
-        }        
+        }  
+
         //AGREGAR BD
         public static AgregarPerroEnBaseDatos() : void
         {           
@@ -139,10 +140,9 @@ namespace PrimerParcial
             //VUELTA
             xhttp.onreadystatechange = () => {
                 if (xhttp.readyState == 4 && xhttp.status == 200) {
-                    alert(xhttp.responseText);
-                    /*let obj : any = JSON.parse(xhttp.responseText);                    
+                    let obj : any = JSON.parse(xhttp.responseText);                    
                     //INFORMO SI SE AGREGO O NO
-                    if (obj.FotoOK == true) {  
+                    if (obj.TodoOK == true) {  
                         if(hidden == "Mod"){
                             console.log("Perro modificado en BD");
                         }else{
@@ -157,10 +157,12 @@ namespace PrimerParcial
                             console.error("El perro no se modifico en BD");
                         }else{
                             console.error("El perro no se agrego en BD");
-                        }                        
+                        }     
+                        //MUESTRO TABLA ACTUALIZADA
+                        PrimerParcial.Manejadora.MostrarPerrosBaseDatos();                   
                         //OCULTO EL GIF
                         PrimerParcial.Manejadora.AdministrarGif(false);
-                    }*/
+                    }
                 }
             }
             //SI ENTRE POR MODIFICAR RESTAURO VALORES    
@@ -307,7 +309,7 @@ namespace PrimerParcial
                             console.error("El perro no se pudo eliminar");
                             //OCULTO EL GIF
                             PrimerParcial.Manejadora.AdministrarGif(false);
-                        }                       
+                        }                      
                     }
                 }
             }
@@ -344,7 +346,21 @@ namespace PrimerParcial
         }        
         public ObtenerPerrosPorTamanio() : void
         {
-            alert("Hola");
+            PrimerParcial.Manejadora.AdministrarGif(true);
+            //aAJAX POST
+            xhttp.open("POST", "./BACKEND/perros_x_tamanio_bd.php", true);
+            xhttp.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+            //ENVIO LA PETICION
+            xhttp.send();            
+            //VUELTA
+            xhttp.onreadystatechange = () => {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    //MUESTRO
+                    console.log(xhttp.responseText);
+                    //OCULTO EL GIF
+                    PrimerParcial.Manejadora.AdministrarGif(false);
+                }                
+            }
         }
         //======================================================================
         //=========================GIF Y LIMPIAR================================

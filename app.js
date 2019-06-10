@@ -171,28 +171,32 @@ var PrimerParcial;
             //VUELTA
             xhttp.onreadystatechange = function () {
                 if (xhttp.readyState == 4 && xhttp.status == 200) {
-                    alert(xhttp.responseText);
-                    /*let obj : any = JSON.parse(xhttp.responseText);
+                    var obj = JSON.parse(xhttp.responseText);
                     //INFORMO SI SE AGREGO O NO
-                    if (obj.FotoOK == true) {
-                        if(hidden == "Mod"){
+                    if (obj.TodoOK == true) {
+                        if (hidden == "Mod") {
                             console.log("Perro modificado en BD");
-                        }else{
+                        }
+                        else {
                             console.log("Perro agregado en BD");
                         }
                         //MUESTRO TABLA ACTUALIZADA
                         PrimerParcial.Manejadora.MostrarPerrosBaseDatos();
                         //OCULTO EL GIF
                         PrimerParcial.Manejadora.AdministrarGif(false);
-                    }else{
+                    }
+                    else {
                         if (hidden == "Mod") {
                             console.error("El perro no se modifico en BD");
-                        }else{
+                        }
+                        else {
                             console.error("El perro no se agrego en BD");
                         }
+                        //MUESTRO TABLA ACTUALIZADA
+                        PrimerParcial.Manejadora.MostrarPerrosBaseDatos();
                         //OCULTO EL GIF
                         PrimerParcial.Manejadora.AdministrarGif(false);
-                    }*/
+                    }
                 }
             };
             //SI ENTRE POR MODIFICAR RESTAURO VALORES    
@@ -355,7 +359,21 @@ var PrimerParcial;
             unaManejadora.ObtenerPerrosPorTamanio();
         };
         Manejadora.prototype.ObtenerPerrosPorTamanio = function () {
-            alert("Hola");
+            PrimerParcial.Manejadora.AdministrarGif(true);
+            //aAJAX POST
+            xhttp.open("POST", "./BACKEND/perros_x_tamanio_bd.php", true);
+            xhttp.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+            //ENVIO LA PETICION
+            xhttp.send();
+            //VUELTA
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    //MUESTRO
+                    console.log(xhttp.responseText);
+                    //OCULTO EL GIF
+                    PrimerParcial.Manejadora.AdministrarGif(false);
+                }
+            };
         };
         //======================================================================
         //=========================GIF Y LIMPIAR================================

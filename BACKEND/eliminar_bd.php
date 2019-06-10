@@ -9,12 +9,17 @@ $miPerro = new perro();
 $miPerro->nombre = $objJSON->nombre;
 $miPerro->raza = $objJSON->raza;
 
-$perro = perro::CompararPerros($objJSON->edad, $objJSON->raza);
+$perros = perro::CompararPerros($objJSON->edad, $objJSON->raza);
+foreach ($perros as $perro) {
+    $string = $perro->MostrarDatos();    
+}
+$perro = json_decode($string);
+
 $consulta = perro::EliminarPerro($miPerro);
 
 if($consulta == 1)
 {
-    if(unlink($perro->path_foto)){
+    if(unlink($perro->foto)){
         $resultado["TodoOK"] = true;
     }else{
         $resultado["TodoOK"] = false;

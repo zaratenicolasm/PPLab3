@@ -7,7 +7,7 @@ $cadenaJSON = isset($_POST['cadenaJson']) ? $_POST['cadenaJson'] : null;
 $objJSON = json_decode($cadenaJSON);
 $foto = "./fotos_modif/".$objJSON->foto."_MODIF.jpg";
 //TRAIGO EL PERRO A ELIMINAR
-$perros = perro::CompararPerros($objJSON->edad, $objJSON->raza);
+$perros = perro::CompararPerrosPorNombre($objJSON->nombre);
 foreach ($perros as $perro) {
     $string = $perro->MostrarDatos();    
 }
@@ -20,7 +20,7 @@ if($consulta == 1)
     if(rename($perro->foto, $foto)){
         $resultado["TodoOK"] = true;
     }else{
-        $resultado["TodoOK"] = true;
+        $resultado["TodoOK"] = false;
     }
 }else{
     $resultado["TodoOK"] = false;

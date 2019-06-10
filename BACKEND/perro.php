@@ -61,6 +61,21 @@ class perro
 
         return $consulta;
     }
+
+    public static function CompararPerrosPorNombre( $nombreAC )
+    {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+
+        $consulta = $objetoAccesoDato->RetornarConsulta("SELECT * FROM perros WHERE nombre LIKE :nom");        
+        
+        $consulta->bindValue(':nom', $nombreAC, PDO::PARAM_STR);
+        
+        $consulta->execute();
+
+        $consulta->setFetchMode(PDO::FETCH_INTO, new perro);
+
+        return $consulta;
+    }
     
     public static function ModificarPerro($tamanio, $edad, $precio, $nombre, $raza, $foto)
     {
